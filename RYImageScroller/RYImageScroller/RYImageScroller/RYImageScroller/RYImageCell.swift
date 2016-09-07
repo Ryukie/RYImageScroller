@@ -21,16 +21,19 @@ class RYImageCell: UICollectionViewCell {
     
     private func setUpUI () {
         backgroundColor = UIColor.lightGray
-        contentView.addSubview(lb_title)
+        
+        contentView.addSubview(iv_image)
+        
+        iv_image.frame = CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.width)
+        
     }
     
 //MARK: - lazyInit
-    lazy var lb_title : UILabel = {
-        var lb = UILabel()
-        lb.textColor = UIColor.black
-        lb.font = UIFont.systemFont(ofSize: 15)
-        lb.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        return lb
+    lazy var iv_image : UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill
+        iv.image = UIImage.init(named:"kuma01")
+        return iv
     }()
     
 }
