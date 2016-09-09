@@ -16,6 +16,8 @@ class RYImageScroller: UIView {
     
     var currentIndex = 0
     
+    weak var timer : Timer?
+    
     let cellID = "imageCell"
 
     override init(frame: CGRect) {
@@ -33,20 +35,42 @@ class RYImageScroller: UIView {
         ]
         
         setupUI()
+        setUpTimer()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+//MARK: - Function
     private func setupUI() {
         backgroundColor = UIColor.red
         addSubview(cv_imageScroller)
-        
         //先滚到中间的第一个
         if imagesURLs.count > 0 {
             cv_imageScroller.scrollToItem(at: IndexPath(item: 0, section: 1), at: .left, animated: false)
         }
+    }
+    
+    func setUpTimer () {
+        let timerT = Timer(timeInterval: 2.0, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
+        timer = timerT
+        RunLoop.current.add(timerT, forMode: .commonModes)
+    }
+    
+    func invalidateTimer () {
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    @objc private func countDown () {
+        currentIndex += 1
+        if currentIndex >= imagesURLs.count {
+            cv_imageScroller.scrollToItem(at: IndexPath(item: 0, section: 2), at: .left, animated: true)
+            return
+        } else {
+        }
+        cv_imageScroller.scrollToItem(at: IndexPath(item: currentIndex, section: 1), at: .left, animated: true)
     }
     
 //MARK: - LazyInit
@@ -96,6 +120,24 @@ extension RYImageScroller:UICollectionViewDelegate,UICollectionViewDataSource {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         scrollIndexFix()
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        print(#function)
+        if currentIndex == imagesURLs.count {
+            cv_imageScroller.scrollToItem(at: IndexPath(item: 0, section: 1), at: .left, animated: false)
+            currentIndex = 0;
+        }
+        scrollIndexFix()
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        invalidateTimer()
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        invalidateTimer()
+        setUpTimer()
     }
     
     func scrollIndexFix() {
