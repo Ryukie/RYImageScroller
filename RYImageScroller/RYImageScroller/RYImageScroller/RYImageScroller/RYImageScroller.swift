@@ -13,10 +13,25 @@ class RYImageScroller: UIView {
      *  需要展示的图片数组
      */
     var imagesURLs = [String]()
-    let cellID = "imageCell"
     
+    var currentIndex = 0
+    
+    let cellID = "imageCell"
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        imagesURLs = [
+            "kuma01",
+            "kuma01",
+            "kuma01",
+            "kuma01",
+            "kuma01",
+            "kuma01",
+            "kuma01",
+            "kuma01"
+        ]
+        
         setupUI()
     }
     
@@ -27,6 +42,11 @@ class RYImageScroller: UIView {
     private func setupUI() {
         backgroundColor = UIColor.red
         addSubview(cv_imageScroller)
+        
+        //先滚到中间的第一个
+        if imagesURLs.count > 0 {
+            cv_imageScroller.scrollToItem(at: IndexPath(item: 0, section: 1), at: .left, animated: false)
+        }
     }
     
 //MARK: - LazyInit
@@ -46,17 +66,21 @@ class RYImageScroller: UIView {
         layoutT.scrollDirection = .horizontal
         return layoutT
     }()
+
+//MARK: - Closure
+    var handler_cellClick :((_ index : NSInteger) -> Void)?
     
 }
 
 //MARK: - collectionDelegateDataSource
 extension RYImageScroller:UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 12
+        return imagesURLs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! RYImageCell
+        cell.imageURL = imagesURLs[indexPath.row]
         return cell
     }
     
@@ -65,12 +89,21 @@ extension RYImageScroller:UICollectionViewDelegate,UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(#function)
+        if (handler_cellClick != nil) {
+            handler_cellClick!(currentIndex)
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let index = NSInteger(scrollView.contentOffset.x / self.frame.width)
-        print(index)
+        scrollIndexFix()
+    }
+    
+    func scrollIndexFix() {
+        let index = NSInteger(cv_imageScroller.contentOffset.x / self.frame.width)
+        let indexMid = index % imagesURLs.count
+        currentIndex = indexMid
+        cv_imageScroller.scrollToItem(at: IndexPath(item: indexMid, section: 1), at: .left, animated: false)
+        print(indexMid)
     }
     
 }

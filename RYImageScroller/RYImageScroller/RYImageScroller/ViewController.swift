@@ -24,8 +24,10 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor.blue
         let v_one = RYImageScroller(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width))
         view.addSubview(v_one)
-        
-        
+
+        v_one.handler_cellClick = { (index)  -> () in
+            print("点击了\(index)")
+        }
         
     }
 

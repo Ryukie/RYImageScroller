@@ -10,6 +10,12 @@ import UIKit
 
 class RYImageCell: UICollectionViewCell {
     
+    var imageURL : String? {
+        didSet {
+            iv_image.image = UIImage.init(named: imageURL!)
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpUI()
@@ -32,8 +38,7 @@ class RYImageCell: UICollectionViewCell {
     lazy var iv_image : UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-        iv.image = UIImage.init(named:"kuma01")
         return iv
     }()
-    
+
 }
