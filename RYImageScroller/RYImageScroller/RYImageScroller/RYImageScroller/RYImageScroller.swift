@@ -12,7 +12,17 @@ class RYImageScroller: UIView {
     /**
      *  需要展示的图片数组
      */
-    var imagesURLs = [String]()
+    var imagesURLs = [String]() {
+        didSet {
+            cv_imageScroller.reloadData()
+            //直接滚到中间的第一张
+            if imagesURLs.count > 0 {
+                cv_imageScroller.scrollToItem(at: IndexPath(item: 0, section: 1), at: .left, animated: false)
+            }
+        }
+    }
+    
+    var placeholderImageName : String?
     
     var currentIndex = 0
     
@@ -22,18 +32,6 @@ class RYImageScroller: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        imagesURLs = [
-            "kuma01",
-            "kuma01",
-            "kuma01",
-            "kuma01",
-            "kuma01",
-            "kuma01",
-            "kuma01",
-            "kuma01"
-        ]
-        
         setupUI()
         setUpTimer()
     }
@@ -46,10 +44,6 @@ class RYImageScroller: UIView {
     private func setupUI() {
         backgroundColor = UIColor.red
         addSubview(cv_imageScroller)
-        //先滚到中间的第一个
-        if imagesURLs.count > 0 {
-            cv_imageScroller.scrollToItem(at: IndexPath(item: 0, section: 1), at: .left, animated: false)
-        }
     }
     
     func setUpTimer () {
@@ -93,6 +87,7 @@ class RYImageScroller: UIView {
 
 //MARK: - Closure
     var handler_cellClick :((_ index : NSInteger) -> Void)?
+    var cb_scrollEndCallBack : ((_ index : NSInteger) -> Void)?
     
 }
 
@@ -105,6 +100,7 @@ extension RYImageScroller:UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! RYImageCell
         cell.imageURL = imagesURLs[indexPath.row]
+        cell.placeholderImageName = placeholderImageName
         return cell
     }
     

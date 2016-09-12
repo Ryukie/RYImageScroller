@@ -23,6 +23,16 @@ class ViewController: UIViewController {
     private func setUpUI () {
         view.backgroundColor = UIColor.blue
         let v_one = RYImageScroller(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width))
+        v_one.imagesURLs = [
+            "http://quncao-app.b0.upaiyun.com/81e6076557197e480acb7a6c3945d7d7.jpg",
+            "http://quncao-app.b0.upaiyun.com//storage/emulated/0/HuabanV2/1469770828438.png.jpg",
+            "http://quncao-app.b0.upaiyun.com/81e6076557197e480acb7a6c3945d7d7.jpg",
+            "http://quncao-app.b0.upaiyun.com//storage/emulated/0/HuabanV2/1469770828438.png.jpg",
+            "http://quncao-app.b0.upaiyun.com/81e6076557197e480acb7a6c3945d7d7.jpg",
+            "http://quncao-app.b0.upaiyun.com//storage/emulated/0/HuabanV2/1469770828438.png.jpg",
+            "http://quncao-app.b0.upaiyun.com/81e6076557197e480acb7a6c3945d7d7.jpg",
+            "http://quncao-app.b0.upaiyun.com//storage/emulated/0/HuabanV2/1469770828438.png.jpg"
+        ]
         view.addSubview(v_one)
 
         v_one.handler_cellClick = { (index)  -> () in

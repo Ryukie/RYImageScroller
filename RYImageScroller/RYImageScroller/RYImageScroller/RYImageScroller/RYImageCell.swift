@@ -10,9 +10,11 @@ import UIKit
 
 class RYImageCell: UICollectionViewCell {
     
+    var placeholderImageName : String?
+    
     var imageURL : String? {
         didSet {
-            iv_image.image = UIImage.init(named: imageURL!)
+            iv_image.sd_setImage(with: URL(string:imageURL!), placeholderImage: UIImage(named: placeholderImageName != nil ? placeholderImageName! : " "))
         }
     }
     
